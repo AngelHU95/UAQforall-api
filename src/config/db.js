@@ -1,5 +1,9 @@
 const mysql = require('mysql2');
+<<<<<<< HEAD
 require('dotenv').config({ path: '../../.env' });
+=======
+require('dotenv').config();
+>>>>>>> 316eea7085eac686970bbb13a26eab87c9742716
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,     // Esto lee la variable del archivo .env
