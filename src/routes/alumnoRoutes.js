@@ -102,4 +102,36 @@ router.delete('/:expediente', async (req, res) => {
     }
 });
 
+// POST: Login de alumno
+router.post('/login', async (req, res) => {
+    const { correo, contrasena } = req.body;
+
+    if (!correo || !contrasena) {
+        return res.status(400).json({ error: "Correo y contraseña son obligatorios" });
+    }
+
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM Alumnos WHERE correo = ? AND contrasena = ?',
+            [correo, contrasena]
+        );
+
+        if (rows.length === 0) {
+            return res.status(401).json({ error: "Credenciales incorrectas" });
+        }
+
+        const alumno = rows[0];
+        // No enviamos la contraseña de vuelta por seguridad
+        delete alumno.contrasena;
+
+        res.json({
+            message: "Login exitoso",
+            alumno: alumno
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: "Error en el servidor", details: error.message });
+    }
+});
+
 module.exports = router;
